@@ -10,4 +10,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Workout {
+    private String name ;
+    private int duration ;
+    private String description ;
+
 }
