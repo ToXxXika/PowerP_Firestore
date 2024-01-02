@@ -8,13 +8,22 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
+@CrossOrigin("*")
 public class UserController {
 
     @Autowired
     UserService userService ;
 
+
+    @GetMapping("/test")
+    public String test(){
+        return "test";
+    }
+
     @PostMapping("/login")
     public LoginResponse Login(@RequestParam(name = "email") String email , @RequestParam(name = "password") String password){
+        System.out.println(email);
+        System.out.println(password);
        return  userService.login(email,password);
     }
     @PostMapping("/addUser")
