@@ -2,47 +2,54 @@ package com.example.pp_backend.Service;
 
 import com.example.pp_backend.Models.User;
 import com.example.pp_backend.PpBackendApplication;
+import com.example.pp_backend.Responses.LoginResponse;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOptions;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import com.google.firebase.cloud.FirestoreClient;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Objects;
 
 @Service
 public class UserService {
-    Firestore db;
 
+ Firestore db ;
     public UserService() throws IOException {
+        try{
         ClassLoader classLoader = PpBackendApplication.class.getClassLoader();
-        File file = new File(Objects.requireNonNull(classLoader.getResource("config.json")).getFile());
+        URL resource = classLoader.getResource("./config.json");
+        if(resource == null){
+            throw new FileNotFoundException("File not found");
+        }
+        File file = new File(Objects.requireNonNull(classLoader.getResource("./config.json")).getFile());
         FileInputStream serviceAccount = new FileInputStream(file.getAbsolutePath());
         FirebaseOptions options = new FirebaseOptions.Builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount)).setDatabaseUrl("https://default.firebaseio.com")
                 .build();
-        try{
+
             FirebaseApp.initializeApp(options);
-            FirestoreOptions firestoreOptions =
-                    FirestoreOptions.getDefaultInstance().toBuilder()
-                            .setProjectId("mvp1996-c0b20")
-                            .build();
-            db = firestoreOptions.getService();
-            System.out.println("Database connected");
+              db = FirestoreClient.getFirestore();
+              System.out.println("Database connected");
+
+
 
         }catch (Exception E){
-            System.out.println(E.getMessage());
+            System.out.println(E.getMessage()+"HELLo");
+            throw  E ;
         }
 
     }
 
-    public boolean login(String email, String password) {
+    public LoginResponse login(String email, String password) {
         try {
             // verify email and password in firestore database
             QuerySnapshot snapshot = db.collection("users").
@@ -51,13 +58,13 @@ public class UserService {
                     .get()
                     .get();
             if (snapshot.isEmpty()) {
-                return false;
+                return new LoginResponse(false,401);
             }
-            return true;
+            return new LoginResponse(true,200);
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return false;
+            return new LoginResponse(false,500);
         }
     }
 
