@@ -5,7 +5,6 @@ import com.example.pp_backend.PpBackendApplication;
 import com.example.pp_backend.Responses.LoginResponse;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.FirestoreOptions;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
@@ -49,24 +48,36 @@ public class UserService {
 
     }
 
-    public LoginResponse login(String email, String password) {
-        try {
-            // verify email and password in firestore database
-            QuerySnapshot snapshot = db.collection("users").
-                    whereEqualTo("email", email).
-                    whereEqualTo("password", password)
-                    .get()
-                    .get();
-            if (snapshot.isEmpty()) {
-                return new LoginResponse(false,401);
-            }
-            return new LoginResponse(true,200);
-
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return new LoginResponse(false,500);
+  /**
+ * This method is used to authenticate a user.
+ * It takes an email and password as input, and checks them against the Firestore database.
+ * If the email and password match a user in the database, it returns a LoginResponse with a status of true and a code of 200.
+ * If the email and password do not match any user in the database, it returns a LoginResponse with a status of false and a code of 401.
+ * If an exception occurs during the process, it returns a LoginResponse with a status of false and a code of 500.
+ *
+ * @param email    The email of the user trying to log in.
+ * @param password The password of the user trying to log in.
+ * @return LoginResponse object containing the status of the login attempt and a code representing the outcome.
+ * @throws Exception If an error occurs during the process.
+ */
+public LoginResponse login(String email, String password) {
+    try {
+        // verify email and password in firestore database
+        QuerySnapshot snapshot = db.collection("users").
+                whereEqualTo("email", email).
+                whereEqualTo("password", password)
+                .get()
+                .get();
+        if (snapshot.isEmpty()) {
+            return new LoginResponse(false,401);
         }
+        return new LoginResponse(true,200);
+
+    } catch (Exception e) {
+        System.out.println(e.getMessage());
+        return new LoginResponse(false,500);
     }
+}
 
     public boolean addUser(User u) {
         try {
