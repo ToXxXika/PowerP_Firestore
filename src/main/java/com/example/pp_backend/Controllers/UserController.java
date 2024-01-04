@@ -12,22 +12,29 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     @Autowired
-    UserService userService ;
+    UserService userService;
 
 
     @GetMapping("/test")
-    public String test(){
+    public String test() {
         return "test";
     }
 
     @PostMapping("/login")
-    public LoginResponse Login(@RequestParam(name = "email") String email , @RequestParam(name = "password") String password){
+    public LoginResponse Login(@RequestParam(name = "email") String email, @RequestParam(name = "password") String password) {
         System.out.println(email);
         System.out.println(password);
-       return  userService.login(email,password);
+        return userService.login(email, password);
     }
+
     @PostMapping("/addUser")
-    public boolean AddUser(@RequestBody User u){
-        return  userService.addUser(u);
+    public boolean AddUser(@RequestBody User u) {
+        System.out.println(u.getFirstname());
+        return userService.addUser(u);
+    }
+    @PostMapping("/updateUser")
+    public boolean UpdateUser(@RequestBody User u) {
+        System.out.println(u.getFirstname());
+        return userService.updateUserExtraStuff(u);
     }
 }
