@@ -163,5 +163,26 @@ public boolean updateUserExtraStuff(User x) {
         return false;
     }
 }
+public User getUserByMail(String mail){
+    try {
+        // Query the Firestore database for a user with the provided email
+        QuerySnapshot snapshot = db.collection("users").
+                whereEqualTo("email", mail)
+                .get()
+                .get();
+
+        // If the query result is empty, return null
+        if (snapshot.isEmpty()) {
+            return null;
+        }
+
+        // If a user is found, return the user object
+        return snapshot.toObjects(User.class).get(0);
+    } catch (Exception e) {
+        // Print the exception message to the console and return null
+        System.out.println(e.getMessage());
+        return null;
+    }
+}
 
 }

@@ -37,4 +37,9 @@ public class UserController {
         System.out.println(u.getFirstname());
         return userService.updateUserExtraStuff(u);
     }
+    @GetMapping("/getUser")
+    public User getUser(@RequestParam(name = "email") String email) {
+        System.out.println(email);
+        return userService.getUserByMail(email);
+    }
 }
