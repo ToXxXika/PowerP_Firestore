@@ -37,4 +37,18 @@ public class WorkoutService {
         return false;
     }
 }
+
+    public String getGoal(String email) {
+        try {
+            // Check if a document with the given email already exists
+            if (db.collection("goals").document(email).get().get().exists()) {
+                return db.collection("goals").document(email).get().get().toObject(Goal.class).getGoal();
+            }
+
+            return "No goal set";
+        } catch (Exception e) {
+            System.out.println(e);
+            return "No goal set";
+        }
+    }
 }

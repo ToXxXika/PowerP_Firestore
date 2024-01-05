@@ -175,6 +175,7 @@ public User getUserByMail(String mail){
         if (snapshot.isEmpty()) {
             return null;
         }
+        System.out.println(snapshot.toObjects(User.class).get(0).getDateofbirth());
 
         // If a user is found, return the user object
         return snapshot.toObjects(User.class).get(0);

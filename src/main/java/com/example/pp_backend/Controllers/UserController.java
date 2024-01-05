@@ -39,7 +39,6 @@ public class UserController {
     }
     @GetMapping("/getUser")
     public User getUser(@RequestParam(name = "email") String email) {
-        System.out.println(email);
         return userService.getUserByMail(email);
     }
 }

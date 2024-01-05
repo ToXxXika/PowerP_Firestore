@@ -26,4 +26,8 @@ public class WorkoutController {
     public boolean addGoal(@RequestParam(name="goal")String goal , @RequestParam(name="email") String email ,@RequestParam(name="username") String username) throws ExecutionException, InterruptedException {
         return workoutService.addGoal(goal,email,username);
     }
+    @GetMapping("/getgoal")
+    public String getGoal(@RequestParam(name="email") String email) throws ExecutionException, InterruptedException {
+        return workoutService.getGoal(email);
+    }
 }
