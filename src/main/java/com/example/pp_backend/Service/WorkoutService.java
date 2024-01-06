@@ -1,6 +1,7 @@
 package com.example.pp_backend.Service;
 
 import com.example.pp_backend.Models.Goal;
+import com.example.pp_backend.Models.Plan;
 import com.example.pp_backend.Models.Workout;
 import com.google.cloud.firestore.Firestore;
 import com.google.firebase.cloud.FirestoreClient;
@@ -17,6 +18,10 @@ public class WorkoutService {
     public WorkoutService() {
         db = FirestoreClient.getFirestore();
 
+    }
+
+    public List<Plan> getPlans() throws ExecutionException,InterruptedException{
+        return db.collection("plan").get().get().toObjects(Plan.class);
     }
 
     public List<Workout> getWorkouts() throws ExecutionException, InterruptedException {
